@@ -24,7 +24,7 @@ headers = {
 
 # You can change these as per your result
 gradePoints = {
-'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0,
+'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0,'AB':0
 }
 
 # These credits correspond to subjects shown in result respectively can change them based on your result
