@@ -1,9 +1,8 @@
+'''This program is used to check if grader works for a single person and test any minute changes'''
+
 import requests
 from bs4 import BeautifulSoup
 
-
-
-sn = "2052"
 url1 = "http://dktes.com/autonomous/index.php"
 url2 = "http://dktes.com/autonomous/result.php"
 

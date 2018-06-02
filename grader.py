@@ -1,9 +1,13 @@
+# Complete grader program just supply your seatno file and watch the magic!!
 import requests
 from bs4 import BeautifulSoup
 from operator import itemgetter
-import os
 
 url2 = "http://dktes.com/autonomous/result.php"
+
+'''
+# Optional headers if required!!
+
 headers = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
     'Accept-Encoding': 'gzip, deflate',
@@ -17,60 +21,80 @@ headers = {
     'Referer':'http://dktes.com/autonomous/index.php',
     'Upgrade-Insecure-Requests': '1',
     'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36'
-}
+}'''
 
-marks = {
+# You can change these as per your result
+gradePoints = {
 'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0,
 }
 
+# These credits correspond to subjects shown in result respectively can change them based on your result
 credits = [4,3,3,3,4,5,1,2]
 
-f = open("list.txt", 'r')
-g = open("result.txt", 'w')
+# total credits available change according to your branch
+total_credits = 25
 
+student_seats = open("list.txt", 'r')
 
-for i in f:
-    print(i.strip(), end=" ", file=g)
+# list containing list of students with seatno, name and sgpa of student
+sgpa_list = []
+for i in student_seats:
+
+    # tempory list to hold seatno, name and sgpa of student
+    temp = []
+    temp.append(i.strip()) # remove whitespaces or escape sequences if any
+
+    # data to be sent as POST request
     data = {
-    'seatno' : str(i),
-    'submitme':''
+        'seatno' : str(i),
+        'submitme':''
     }
 
+    SGPA = 0
+    j =0    # counter to iterate th' credits one by one
 
-    CGPA = 0
-    j =0
-    page = requests.post(url2, data=data, headers=headers)
+    #page = requests.post(url2, data=data, headers=headers)
+    page = requests.post(url2, data=data)
     doc = BeautifulSoup(page.text, 'lxml')
 
     # Grab all of the rows
     table_rows = doc.find_all('tr')
     name_td = table_rows[0].find_all('td')
     name_row = [i.text.strip() for i in name_td]
-    print(name_row[1], end=" ",file=g)
+    temp.append(name_row[1])
 
     for tr in table_rows[6:14]:
         td = tr.find_all('td')
         row = [i.text.strip() for i in td]
-        CGPA = CGPA + marks[row[3].lstrip("*")]*credits[j]
+
+        # based on observation 4th row contains our grade
+        SGPA = SGPA + gradePoints[row[3].lstrip("*")]*credits[j] # to stip out * in condolance
         j+=1
 
-    print("CGPA:- ",CGPA/25,file=g)
+    temp.append(SGPA/total_credits)
+    sgpa_list.append(temp)
 
-f.close()
-g.close()
-g = open("result.txt", 'r')
-cg = []
+# print(sgpa_list)
+sgpa_list.sort(key=itemgetter(2), reverse=True)
+#print(sgpa_list)
 
-for line in g:
-    s = line.strip().split()
-    s[-1] = float(s[-1])
-    cg.append(s)
-y = sorted(cg, key=itemgetter(5), reverse=True)
+student_seats.close()
 
-with open("result_final.txt",'w') as fp:
-    for item in y:
-        fp.write(" ".join(str(i) for i in item))
-        fp.write('\n')
+# writing sorted list to file
+choice = input("Store result as txt file or csv file (Enter 1 or 2): ")
 
-g.close()
-os.remove('result.txt')
+if choice == '1':
+    with open("result.txt",'w') as fp:
+        for index, item in enumerate(sgpa_list):
+            print(index+1,"->"," ".join(str(i) for i in item), file=fp)
+    fp.close()
+
+elif choice == '2':
+    with open("result.csv",'w') as fp:
+        print("Rank,Seat No,Name, SGPA,",file=fp)
+        for index, item in enumerate(sgpa_list):
+            print(index+1,",",",".join(str(i) for i in item), file=fp)
+    fp.close()
+
+else:
+    print("Invalid choice")
