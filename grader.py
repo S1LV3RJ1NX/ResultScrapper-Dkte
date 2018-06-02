@@ -63,15 +63,18 @@ for i in student_seats:
     name_row = [i.text.strip() for i in name_td]
     temp.append(name_row[1])
 
-    for tr in table_rows[6:14]:
+    #for tr in table_rows[6:14]:
+    for tr in table_rows[6:len(table_rows)-3]:
         td = tr.find_all('td')
         row = [i.text.strip() for i in td]
-        #print(row, file=r)
+        #print(row)
 
 
         # based on observation 4th row contains our grade
-        SGPA = SGPA + gradePoints[row[3].lstrip("*")]*credits[j] # to stip out * in condolance
-        j+=1
+        if row[0] == '4':
+            SGPA = SGPA + gradePoints[row[3].lstrip("*")]*credits[j] # to stip out * in condolance
+            j+=1
+            #print(SGPA)
 
     temp.append(SGPA/total_credits)
     sgpa_list.append(temp)
