@@ -24,7 +24,7 @@ headers = {
 
 # You can change these as per your result
 gradePoints = {
-'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0,'AB':0
+'O':10,'A+':9,'A':8,'B+':7,'B':6,'C':5,'P':4,'F':0,'AB':0,'D':0
 }
 
 # These credits correspond to subjects shown in result respectively can change them based on your result
@@ -66,6 +66,8 @@ for i in student_seats:
     for tr in table_rows[6:14]:
         td = tr.find_all('td')
         row = [i.text.strip() for i in td]
+        #print(row, file=r)
+
 
         # based on observation 4th row contains our grade
         SGPA = SGPA + gradePoints[row[3].lstrip("*")]*credits[j] # to stip out * in condolance
