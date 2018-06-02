@@ -1,4 +1,3 @@
-# Complete grader program just supply your seatno file and watch the magic!!
 import requests
 from bs4 import BeautifulSoup
 from operator import itemgetter
@@ -34,6 +33,7 @@ credits = [4,3,3,3,4,5,1,2]
 # total credits available change according to your branch
 total_credits = 25
 
+# your seatno file ensure each seatno is on newline
 student_seats = open("list.txt", 'r')
 
 # list containing list of students with seatno, name and sgpa of student
