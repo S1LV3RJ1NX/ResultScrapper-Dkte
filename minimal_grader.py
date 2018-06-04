@@ -39,5 +39,8 @@ doc = BeautifulSoup(page.text, 'html.parser')
 # Grab all of the rows
 row_tags = doc.find_all('tr')
 
-for row in row_tags:
-    print(row.text.strip())
+for tr in row_tags:
+    #print(row.text.strip())
+    td = tr.find_all('td')
+    row = [i.text.strip() for i in td]
+    print(row)

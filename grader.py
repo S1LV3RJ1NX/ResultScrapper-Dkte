@@ -76,7 +76,7 @@ for i in student_seats:
             j+=1
             #print(SGPA)
 
-    temp.append(SGPA/total_credits)
+    temp.append(float("{0:.2f}".format(SGPA/total_credits)))
     sgpa_list.append(temp)
 
 # print(sgpa_list)
